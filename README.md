@@ -31,3 +31,10 @@ This library reduces a sequence to one entry per maximal group of consecutive du
 Only **consecutive** duplicates are grouped. If a line appears, disappears, and reappears, that is two groups, each with its own count. This is the intended behaviour: interleaved distinct lines genuinely break a run, and merging non-adjacent duplicates would hide ordering information that matters in logs.
 
 Equality is exact string equality (`==`). Lines that differ only in whitespace or timestamp are treated as distinct. If you need to ignore timestamps, strip them before passing lines in.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
